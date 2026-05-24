@@ -75,3 +75,8 @@ echo "##[group]Add hosts entry: ${hostname} -> $(hostname -I | cut -d' ' -f1)"
     echo "$(hostname -I | cut -d' ' -f1) ${hostname} # reconcilerio/registry/${name}" | sudo tee -a /etc/hosts > /dev/null
     cat /etc/hosts
 echo "##[endgroup]"
+
+echo "##[group]Flush dns cache"
+    sudo resolvectl flush-caches
+    getent hosts ${hostname}
+echo "##[endgroup]"

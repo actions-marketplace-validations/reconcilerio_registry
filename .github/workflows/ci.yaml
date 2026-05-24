@@ -93,8 +93,13 @@ jobs:
         set -o nounset
         set -o pipefail
 
-        crane copy ubuntu ${{ steps.registry.outputs.registry }}/tests/ubuntu
-        crane digest ${{ steps.registry.outputs.registry }}/tests/ubuntu
+        opts=
+        if [[ "${{ matrix.with.secure }}" == "false" ]] ; then
+          opts="${opts:+${opts} }--insecure"
+        fi
+
+        crane copy ${opts} ubuntu ${{ steps.registry.outputs.registry }}/tests/ubuntu
+        crane digest ${opts} ${{ steps.registry.outputs.registry }}/tests/ubuntu
     - name: Use registry (alt)
       if: matrix.with-alt
       run: |
@@ -102,8 +107,13 @@ jobs:
         set -o nounset
         set -o pipefail
 
-        crane copy ${{ steps.registry.outputs.registry }}/tests/ubuntu ${{ steps.registry-alt.outputs.registry }}/tests/ubuntu
-        crane digest ${{ steps.registry-alt.outputs.registry }}/tests/ubuntu
+        opts=
+        if [[ "${{ matrix.with-alt.secure }}" == "false" ]] ; then
+          opts="${opts:+${opts} }--insecure"
+        fi
+
+        crane copy ${opts} ${{ steps.registry.outputs.registry }}/tests/ubuntu ${{ steps.registry-alt.outputs.registry }}/tests/ubuntu
+        crane digest ${opts} ${{ steps.registry-alt.outputs.registry }}/tests/ubuntu
     - name: Show registry outputs
       run: |
         set -o errexit
