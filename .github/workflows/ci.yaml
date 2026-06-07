@@ -45,7 +45,7 @@ jobs:
             port: 8443
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.3
     - name: Custom certs
       if: matrix.with.tls-cert
       run: |
